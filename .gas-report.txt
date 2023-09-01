@@ -1,0 +1,18 @@
+No files changed, compilation skipped
+
+Running 1 test for test/unit/SolBin.t.sol:SolBinTest
+[32m[PASS][0m testUint256ToBinaryStringUnit() (gas: 209264)
+Test result: [32mok[0m. 1 passed; 0 failed; finished in 3.32ms
+
+Running 1 test for test/differencial/SolBinFFI.t.sol:SolbinTestFFI
+[32m[PASS][0m testUint256ToBinaryStringFFI(uint256) (runs: 256, μ: 96591, ~: 33921)
+Test result: [32mok[0m. 1 passed; 0 failed; finished in 40.67s
+| src/test/Implementation.sol:Implementation contract |                 |       |        |        |         |
+|-----------------------------------------------------|-----------------|-------|--------|--------|---------|
+| Deployment Cost                                     | Deployment Size |       |        |        |         |
+| 159602                                              | 829             |       |        |        |         |
+| Function Name                                       | min             | avg   | median | max    | # calls |
+| toBinaryString                                      | 614             | 34244 | 7907   | 144618 | 6       |
+
+
+

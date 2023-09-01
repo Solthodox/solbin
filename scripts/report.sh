@@ -1,0 +1,1 @@
+forge test --gas-report | tee .gas-report.txt 
