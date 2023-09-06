@@ -1,8 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.21;
+/// @notice Library for converting numbers into binary strings and other binary operations.
+/// @author Solthodox (https://github.com/Solthodox/solbin/blob/main/src/SolBin.sol)
+
+pragma solidity ^0.8.4;
 
 library SolBin {
-
+    /// @notice inspired by Solady's LibString (https://github.com/Vectorized/solady/blob/main/src/utils/LibString.sol)
     function toBinaryString(uint256 value) internal pure returns (string memory str) {
         /// @solidity memory-safe-assembly
         assembly {
@@ -10,9 +13,9 @@ library SolBin {
         // we allocate 0xa0 bytes to keep the free memory pointer 32-byte word aligned.
         // We will need 1 word for the trailing zeros padding, 1 word for the length,
         // and 8 words for a maximum of 256 digits.
-        str := add(mload(0x40), 0x120) // al stack
+        str := add(mload(0x40), 0x120) 
         // Update the free memory pointer to allocate.
-        mstore(0x40, add(str, 0x20)) // 0x120 en slot 0x40
+        mstore(0x40, add(str, 0x20))
         // Zeroize the slot after the string.
         mstore(str, 0)
         // Cache the end of the memory to calculate the length later.
