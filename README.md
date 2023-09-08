@@ -61,6 +61,7 @@ SolBin provides additional utility functions for various binary operations.
 - `getHammingDistance(string memory bin1, string memory bin2)`: Calculates the Hamming distance between two equal-length binary strings.
 - `from(string memory bin)`: Creates a `uint256` from its binary representation.
 - `insert(uint256 value, uint8 bitPosition, bool set)`: Manipulates uint256 numbers bit by bit.
+- `get(uint256 value, uint8 bitPosition)`: Reads uint256 numbers bit by bit.
 
 ## Examples
 
@@ -73,12 +74,12 @@ pragma solidity ^0.8.4;
 contract BitMapContract{
     /** flags:
     0 => condition1
-    2 => condition1
-    3 => condition1
-    4 => condition1
-    5 => condition1
-    6 => condition1
-    7 => condition1
+    2 => condition2
+    3 => condition3
+    4 => condition4
+    5 => condition5
+    6 => condition6
+    7 => condition7
     */
     function foo(uint8 flags) {
         //-

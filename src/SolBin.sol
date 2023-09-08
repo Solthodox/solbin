@@ -165,4 +165,11 @@ library SolBin {
             if (_value == 0) return value + (2 ** bitPosition);
         }
     }
+
+    /// @dev Returns wether a specific bit of a number is set(true) o r unset(false)
+    /// @param value The original binary number.
+    /// @param bitPosition The position (1-based) of the bit to read.
+    function get(uint256 value, uint8 bitPosition) internal pure returns(bool) {
+        return (value & (1 << bitPosition)) != 0;
+    }
 }
