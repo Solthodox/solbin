@@ -1,26 +1,38 @@
-No files changed, compilation skipped
+Compiling 1 files with 0.8.21
+Solc 0.8.21 finished in 1.43s
+Compiler run successful (with warnings)
+[33mwarning[6321]: [0m[33mWarning: Unnamed return variable can remain unassigned. Add an explicit return with value to all non-reverting code paths or name the variable.
+   --> src/SolBin.sol:155:88:
+    |
+155 |     function insert(uint256 value, uint8 bitPosition, bool set) internal pure returns (uint256) {
+    |                                                                                        ^^^^^^^
 
-Running 5 tests for test/unit/SolBin.t.sol:SolBinTest
+[0m
+
+
+Running 6 tests for test/unit/SolBin.t.sol:SolBinTest
 [32m[PASS][0m testCountBits() (gas: 81514)
-[32m[PASS][0m testFrom() (gas: 81103)
-[32m[PASS][0m testNullToBinaryStringUnit() (gas: 6928)
-[32m[PASS][0m testToBinaryStringFillAllBits() (gas: 190905)
-[32m[PASS][0m testToBinaryStringUnit() (gas: 60102)
-Test result: [32mok[0m. 5 passed; 0 failed; finished in 6.51ms
+[32m[PASS][0m testFrom() (gas: 81081)
+[32m[PASS][0m testInsert() (gas: 17249)
+[32m[PASS][0m testNullToBinaryStringUnit() (gas: 6972)
+[32m[PASS][0m testToBinaryStringFillAllBits() (gas: 190928)
+[32m[PASS][0m testToBinaryStringUnit() (gas: 60190)
+Test result: [32mok[0m. 6 passed; 0 failed; finished in 8.28ms
 
 Running 1 test for test/differencial/SolBinFFI.t.sol:SolbinTestFFI
-[32m[PASS][0m testUint256ToBinaryStringFFI(uint256) (runs: 256, μ: 37484, ~: 21283)
-Test result: [32mok[0m. 1 passed; 0 failed; finished in 46.12s
+[32m[PASS][0m testUint256ToBinaryStringFFI(uint256) (runs: 256, μ: 38190, ~: 19604)
+Test result: [32mok[0m. 1 passed; 0 failed; finished in 47.44s
 | src/test/Implementation.sol:Implementation contract |                 |       |        |       |         |
 |-----------------------------------------------------|-----------------|-------|--------|-------|---------|
 | Deployment Cost                                     | Deployment Size |       |        |       |         |
-| 392430                                              | 1992            |       |        |       |         |
+| 445480                                              | 2257            |       |        |       |         |
 | Function Name                                       | min             | avg   | median | max   | # calls |
 | countBits                                           | 1185            | 16755 | 11199  | 37883 | 3       |
 | from                                                | 1580            | 18521 | 16138  | 40228 | 4       |
-| toBinaryString                                      | 800             | 4692  | 1410   | 15260 | 9       |
+| insert                                              | 594             | 798   | 940    | 966   | 9       |
+| toBinaryString                                      | 800             | 4631  | 1227   | 15260 | 9       |
 | toBinaryStringFillAllBits                           | 25642           | 43858 | 48524  | 52743 | 4       |
-| toBinaryStringPrefixed                              | 1168            | 5394  | 3130   | 14148 | 4       |
+| toBinaryStringPrefixed                              | 1190            | 5416  | 3152   | 14170 | 4       |
 
 
 
