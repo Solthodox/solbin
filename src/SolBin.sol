@@ -4,8 +4,6 @@
 
 pragma solidity ^0.8.4;
 
-import "forge-std/console.sol";
-
 library SolBin {
     /// @dev Returns the binary string representation of a uint256 value.
     /// @param value The decimal value to convert to binary.
@@ -45,13 +43,6 @@ library SolBin {
         }
     }
 
-    /// @dev Returns the binary string representation of a uint256 value with a "0b" prefix.
-    /// @param value The decimal value to convert to binary.
-    /// @return Binary string representation with a "0b" prefix.
-    function toBinaryStringPrefixed(uint256 value) internal pure returns (string memory) {
-        return string.concat("0b", toBinaryString(value));
-    }
-
     /// @dev Returns the binary string representation of a uint256 value, filling all leading zeros to a total length of 256 characters.
     /// @param value The decimal value to convert to binary.
     /// @return Binary string representation with leading zeros.
@@ -70,63 +61,36 @@ library SolBin {
         }
         return bin;
     }
+    /// @notice Counts the number of set (1) and unset (0) bits in a uint256 value.
+    /// @param value The uint256 value to count bits for.
+    /// @return setBits The count of set bits (1s).
+    /// @return unsetBits The count of unset bits (0s).
 
-    /// @dev Returns the binary string representation of a uint256 value with a "0b" prefix, filling all leading zeros to a total length of 256 characters.
-    /// @param value The decimal value to convert to binary.
-    /// @return Binary string representation with "0b" prefix and leading zeros.
-    function toBinaryStringFillAllBitsPrefixed(uint256 value) internal pure returns (string memory) {
-        return string.concat("0b", toBinaryStringFillAllBits(value));
+    function countBits(uint256 value) public pure returns (uint256 setBits, uint256 unsetBits) {
+        uint256 mask = 1;
+        for (uint256 i = 0; i < 256; i++) {
+            if ((value & mask) != 0) {
+                setBits++;
+            } else {
+                unsetBits++;
+            }
+            mask <<= 1;
+        }
     }
 
-    /// @dev Returns the number of set (1) and unset (0) bits in a binary string.
-    /// @param bin The binary string to analyze.
-    /// @return set The count of set bits.
-    /// @return unset The count of unset bits.
-    /// @notice This function counts the number of '1's and '0's in the binary string and returns the counts as (set, unset).
-    function countBits(string memory bin) internal pure returns (uint256 set, uint256 unset) {
-        //cast to bytes
-        bytes memory _bin = bytes(bin);
-        // cache length
-        uint256 len = _bin.length;
-        // loop thorugh bytes
-        unchecked {
-            for (uint256 i = 0; i < len;) {
-                // bytes1 0x31 == "1"
-                if (_bin[i] == 0x31) {
-                    set++;
-                }
-                // bytes1 0x30 == "0"
-                else if (_bin[i] != 0x30 && _bin[i] != 0x31) {
-                    revert("Invalid binary");
-                }
-                ++i;
+    /// @notice Calculates the Hamming distance between two uint256 values.
+    /// @param a The first uint256 value.
+    /// @param b The second uint256 value.
+    /// @return distance The Hamming distance between the two values.
+    function getHammingDistance(uint256 a, uint256 b) internal pure returns (uint256 distance) {
+        uint256 xorResult = a ^ b;
+        while (xorResult > 0) {
+            if (xorResult % 2 == 1) {
+                distance++;
             }
-            unset = len - set;
+            xorResult >>= 1; // Right shift to check the next bit
         }
-        return (set, unset);
-    }
-
-    /// @dev Returns the Hamming distance between two equal-length binary strings.
-    /// @param bin1 The first binary string.
-    /// @param bin2 The second binary string.
-    /// @return distance The Hamming distance between the two binary strings.
-    /// @notice The Hamming distance is the number of positions at which the bits differ between two binary strings of equal length.
-    function getHammingDistance(string memory bin1, string memory bin2) internal pure returns (uint256 distance) {
-        bytes memory _bin1;
-        bytes memory _bin2;
-        assembly {
-            _bin1 := bin1
-            _bin2 := bin2
-        }
-        uint256 len = _bin1.length;
-        require(_bin2.length == len, "len");
-        for (uint256 i = 0; i < len;) {
-            unchecked {
-                // for each bit that is different the distance increases by 1
-                if (_bin1[i] != _bin2[i]) distance++;
-                ++i;
-            }
-        }
+        return distance;
     }
 
     /// @dev Converts a binary string to a decimal uint256 value.
@@ -147,29 +111,60 @@ library SolBin {
         return res;
     }
 
-    /// @dev Inserts or modifies a bit at a specific position in a binary number.
+    /// @dev Modifies a bit at a specific position in a binary number.
     /// @param value The original binary number.
     /// @param bitPosition The position (1-based) of the bit to insert or modify.
     /// @param set A boolean indicating whether to set the bit to 1 (true) or 0 (false).
     /// @return The modified binary number.
-    function insert(uint256 value, uint8 bitPosition, bool set) internal pure returns (uint256) {
+    function set(uint256 value, uint8 bitPosition, bool set) internal pure returns (uint256) {
         // isolate the bit
-        uint256 _value = (value & (1 << bitPosition));
+        bool targetBit = get(value, bitPosition);
         // if the bit is already as desired return the initial value
-        if ((_value != 0 && set) || (_value == 0 && !set)) {
+        if ((targetBit == true && set) || (targetBit == false && !set)) {
             return value;
         }
         // if not add or substract the bit decimal depresentation
         else {
-            if (_value != 0) return value - (2 ** bitPosition);
-            if (_value == 0) return value + (2 ** bitPosition);
+            if (targetBit == true) return value - (2 ** bitPosition);
+            if (targetBit == false) return value + (2 ** bitPosition);
         }
     }
 
     /// @dev Returns wether a specific bit of a number is set(true) o r unset(false)
     /// @param value The original binary number.
     /// @param bitPosition The position (1-based) of the bit to read.
-    function get(uint256 value, uint8 bitPosition) internal pure returns(bool) {
+    function get(uint256 value, uint8 bitPosition) internal pure returns (bool) {
         return (value & (1 << bitPosition)) != 0;
+    }
+
+    /// @notice Inserts consecutive bits into a value starting from a specified bit position.
+    /// @param value The original binary number.
+    /// @param fromBitPosition The initial bit position to start modification from.
+    /// @param bits The bits to be introduced consecutively.
+    /// @return The modified binary number.
+    function insert(uint256 value, uint8 fromBitPosition, uint256 bits) internal pure returns (uint256) {
+        uint256 len;
+        uint256 _bits = bits;
+        if (bits == 0) {
+            len = 1;
+        } else {
+            // get new bits length
+            while (_bits > 0) {
+                unchecked {
+                    if (_bits != 0) len++;
+                    else break;
+                    _bits >>= 1;
+                }
+            }
+        }
+        require(256 - fromBitPosition > len, "len");
+        // Create a mask to preserve all trailing bits except the one at fromBitPosition
+        uint256 mask = ((1 << fromBitPosition) - 1) | (((1 << len) - 1) << (fromBitPosition + len));
+
+        // Calculate the inserted value, preserving the original trailing bits
+        uint256 insertedValue = ((value >> fromBitPosition) << len) | bits;
+
+        // Combine the inserted value with the original trailing bits while excluding the undesired bit
+        return (value & mask) | insertedValue;
     }
 }

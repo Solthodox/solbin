@@ -19,22 +19,14 @@ contract SolBinTest is Test {
     function testToBinaryStringUnit() public {
         uint256 n = 2;
         assertEq(keccak256(abi.encodePacked(solbin.toBinaryString(n))), keccak256(abi.encodePacked("10")));
-        assertEq(keccak256(abi.encodePacked(solbin.toBinaryStringPrefixed(n))), keccak256(abi.encodePacked("0b10")));
         n = 128;
         assertEq(keccak256(abi.encodePacked(solbin.toBinaryString(n))), keccak256(abi.encodePacked("10000000")));
-        assertEq(
-            keccak256(abi.encodePacked(solbin.toBinaryStringPrefixed(n))), keccak256(abi.encodePacked("0b10000000"))
-        );
         n = 178237891274893129;
         assertEq(
             keccak256(abi.encodePacked(solbin.toBinaryString(n))),
             keccak256(abi.encodePacked("1001111001001110100110101011110010111101000110011101001001"))
         );
 
-        assertEq(
-            keccak256(abi.encodePacked(solbin.toBinaryStringPrefixed(n))),
-            keccak256(abi.encodePacked("0b1001111001001110100110101011110010111101000110011101001001"))
-        );
         n = 2 ** 200;
         assertEq(
             keccak256(abi.encodePacked(solbin.toBinaryString(n))),
@@ -44,30 +36,21 @@ contract SolBinTest is Test {
                 )
             )
         );
-
-        assertEq(
-            keccak256(abi.encodePacked(solbin.toBinaryStringPrefixed(n))),
-            keccak256(
-                abi.encodePacked(
-                    "0b100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-                )
-            )
-        );
     }
 
     function testCountBits() public {
         uint256 n = 2;
-        (uint256 set, uint256 unset) = solbin.countBits(solbin.toBinaryString(n));
+        (uint256 set, uint256 unset) = solbin.countBits(n);
         assertEq(set, 1);
-        assertEq(unset, 1);
+        assertEq(unset, 255);
         n = 7839278349278923;
-        (set, unset) = solbin.countBits(solbin.toBinaryString(n));
+        (set, unset) = solbin.countBits(n);
         assertEq(set, 31);
-        assertEq(unset, 22);
+        assertEq(unset, 225);
         n = 2 ** 230 - 15;
-        (set, unset) = solbin.countBits(solbin.toBinaryString(n));
+        (set, unset) = solbin.countBits(n);
         assertEq(set, 227);
-        assertEq(unset, 3);
+        assertEq(unset, 29);
     }
 
     function testToBinaryStringFillAllBits() public {
@@ -121,18 +104,37 @@ contract SolBinTest is Test {
         );
     }
 
-    function testInsert() public {
+    function testSet() public {
         uint256 n = 124;
-        assertEq(solbin.insert(n, 1, true), n + 2**1);
-        assertEq(solbin.insert(n, 1, false), n);
-        assertEq(solbin.insert(n, 3, false), n - 2**3);
-        assertEq(solbin.insert(n, 3, true), n);
+        assertEq(solbin.set(n, 1, true), n + 2 ** 1);
+        assertEq(solbin.set(n, 1, false), n);
+        assertEq(solbin.set(n, 3, false), n - 2 ** 3);
+        assertEq(solbin.set(n, 3, true), n);
         n = 1232478238944;
-        assertEq(solbin.insert(n, 7, false), n - 2**7);
-        assertEq(solbin.insert(n, 15, true), n + 2**15);
-        assertEq(solbin.insert(n, 3, false), n);
-        assertEq(solbin.insert(n, 6, true), n);
-        n = 2**127;
-        assertEq(solbin.insert(n, 127, false), 0);
+        assertEq(solbin.set(n, 7, false), n - 2 ** 7);
+        assertEq(solbin.set(n, 15, true), n + 2 ** 15);
+        assertEq(solbin.set(n, 3, false), n);
+        assertEq(solbin.set(n, 6, true), n);
+        n = 2 ** 127;
+        assertEq(solbin.set(n, 127, false), 0);
     }
+
+    function testGet() public {
+        uint256 n = 124;
+        assertFalse(solbin.get(n, 1));
+        assertTrue(solbin.get(n, 4));
+        n = 1232478238944;
+        assertTrue(solbin.get(n, 7));
+        assertFalse(solbin.get(n, 15));
+        n = 2 ** 127;
+        assertTrue(solbin.get(n, 127));
+    }
+
+    function testGetHammingDistance() public {
+        assertEq(solbin.getHammingDistance(16, 17), 1);
+        assertEq(solbin.getHammingDistance(721839712, 721839712), 0);
+        assertEq(solbin.getHammingDistance(202, 123), 4);
+    }
+
+
 }
