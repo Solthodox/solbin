@@ -18,8 +18,8 @@ contract Implementation {
         return value.countBits();
     }
 
-    function toBinaryStringFillAllBits(uint256 value) external pure returns (string memory) {
-        return value.toBinaryStringFillAllBits();
+    function toBinaryStringFillAllBits(uint256 value, bool fillWithOnes) external pure returns (string memory) {
+        return value.toBinaryStringFillAllBits(fillWithOnes);
     }
 
     function from(string memory bin) external pure returns (uint256) {
@@ -38,7 +38,7 @@ contract Implementation {
         return value.get(bitPosition);
     }
 
-    function insert(uint256 value, uint8 fromBitPosition, uint256 bits) external pure returns (uint256) {
+    function insert(uint256 value, uint8 fromBitPosition, uint256 bits) external view returns (uint256) {
         return value.insert(fromBitPosition, bits);
     }
 }

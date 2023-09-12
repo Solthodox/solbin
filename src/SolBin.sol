@@ -3,6 +3,7 @@
 /// @author Solthodox (https://github.com/Solthodox/solbin)
 
 pragma solidity ^0.8.4;
+import "forge-std/console.sol";
 
 library SolBin {
     /// @dev Returns the binary string representation of a uint256 value.
@@ -45,14 +46,19 @@ library SolBin {
 
     /// @dev Returns the binary string representation of a uint256 value, filling all leading zeros to a total length of 256 characters.
     /// @param value The decimal value to convert to binary.
+    /// @param fillWithOnes false for all leading bits to be zeroes, true for them to be ones.
     /// @return Binary string representation with leading zeros.
-    function toBinaryStringFillAllBits(uint256 value) internal pure returns (string memory) {
+    function toBinaryStringFillAllBits(uint256 value, bool fillWithOnes) internal pure returns (string memory) {
         string memory bin = toBinaryString(value);
         uint256 len = bytes(bin).length;
         if (len < 256) {
             bytes memory leadingZeroes = new bytes(256-len);
             for (uint256 i = 0; i < 256 - len;) {
-                leadingZeroes[i] = 0x30;
+                if(fillWithOnes){
+                    leadingZeroes[i] = 0x31;
+                }else{
+                    leadingZeroes[i] = 0x30;
+                }
                 unchecked {
                     ++i;
                 }
@@ -142,29 +148,43 @@ library SolBin {
     /// @param fromBitPosition The initial bit position to start modification from.
     /// @param bits The bits to be introduced consecutively.
     /// @return The modified binary number.
-    function insert(uint256 value, uint8 fromBitPosition, uint256 bits) internal pure returns (uint256) {
+    function insert(uint256 value, uint256 fromBitPosition, uint256 bits) internal view returns (uint256) {
+        require(fromBitPosition <= 255, "fromBitPosition must be in the range of 0 to 255");
+        
         uint256 len;
         uint256 _bits = bits;
+        
         if (bits == 0) {
             len = 1;
         } else {
-            // get new bits length
+            // Get the number of bits required to represent 'bits'
             while (_bits > 0) {
                 unchecked {
-                    if (_bits != 0) len++;
-                    else break;
+                    len++;
                     _bits >>= 1;
                 }
             }
         }
-        require(256 - fromBitPosition > len, "len");
-        // Create a mask to preserve all trailing bits except the one at fromBitPosition
-        uint256 mask = ((1 << fromBitPosition) - 1) | (((1 << len) - 1) << (fromBitPosition + len));
+        console.log("len : ", len);
+        
+        require(256 - fromBitPosition >= len, "Invalid input: insufficient space to insert bits");
 
-        // Calculate the inserted value, preserving the original trailing bits
-        uint256 insertedValue = ((value >> fromBitPosition) << len) | bits;
+        // Create a mask with all the bits set to 1
+        uint256 mask = ~uint256(0);
+        uint256 from = fromBitPosition;
+        uint256 to = fromBitPosition +1 - len;
+        unchecked {
+            // Shift the mask to the right by 'from' positions
+            mask >>= 255 -  from;
+            
+            // Shift the mask to the left by 'to' positions
+            mask <<= to;
+            
+            // Invert the mask to set 0s in the specified range
+            mask = ~mask;
+        }
+        console.log("mask : ", toBinaryString(mask));
 
-        // Combine the inserted value with the original trailing bits while excluding the undesired bit
-        return (value & mask) | insertedValue;
+        return (value & mask) | (bits << from);
     }
 }

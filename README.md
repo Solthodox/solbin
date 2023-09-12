@@ -37,14 +37,14 @@ string memory binaryString = value.toBinaryString();
 
 ```solidity
 // Count the set and unset bits in a binary string
-(uint256 setBits, uint256 unsetBits) = SolBin.countBits("101001");
+(uint256 setBits, uint256 unsetBits) = ("101001").countBits();
 ```
 
 ### Calculating Hamming Distance
 
 ```solidity
-// Calculate the Hamming distance between two binary strings
-uint256 distance = SolBin.getHammingDistance("10101", "10001");
+// Calculate the Hamming distance between two decimal numbers
+uint256 distance = SolBin.getHammingDistance(46, 139);
 ```
 
 ### And more...
@@ -54,14 +54,13 @@ SolBin provides additional utility functions for various binary operations.
 ## Functions
 
 - `toBinaryString(uint256 value)`: Converts a decimal number to a binary string.
-- `toBinaryStringPrefixed(uint256 value)`: Converts a decimal number to a binary string with a "0b" prefix.
-- `toBinaryStringFillAllBits(uint256 value)`: Converts a decimal number to a binary string with leading zeros to a total length of 256 characters.
-- `toBinaryStringFillAllBitsPrefixed(uint256 value)`: Converts a decimal number to a binary string with a "0b" prefix and leading zeros.
+- `toBinaryStringFillAllBits(uint256 value, bool fillWithOnes)`: Converts a decimal number to a binary string with leading zeros to a total length of 256 characters.
 - `countBits(string memory bin)`: Counts the number of set (1) and unset (0) bits in a binary string.
 - `getHammingDistance(string memory bin1, string memory bin2)`: Calculates the Hamming distance between two equal-length binary strings.
 - `from(string memory bin)`: Creates a `uint256` from its binary representation.
+- `set(string memory bin)`: Modifies a bit of a decimal number.
+- `get(string memory bin)`: Reads a bit of a decimal number.
 - `insert(uint256 value, uint8 bitPosition, bool set)`: Manipulates uint256 numbers bit by bit.
-- `get(uint256 value, uint8 bitPosition)`: Reads uint256 numbers bit by bit.
 
 ## Examples
 
@@ -72,16 +71,15 @@ Solbin's main purpose is to be used in testing environments where binary represe
 pragma solidity ^0.8.4;
 
 contract BitMapContract{
-    /** flags:
-    0 => condition1
-    2 => condition2
-    3 => condition3
-    4 => condition4
-    5 => condition5
-    6 => condition6
-    7 => condition7
+    /** bitmap:
+            bit 0 => condition1
+            bit 1 => condition1
+            bit 2 => condition1
+            bit 3 => condition1
+            bit 4 => condition1
+            bit 5 to 160 => some address
     */
-    function foo(uint8 flags) {
+    function foo(uint256 bitmap) {
         //-
     }
 }
@@ -106,22 +104,20 @@ contract BitMapContractTest is Test{
     }
 
     function testFoo() {
-        uint256 flags=0;
+        uint256 bitmap=0;
         // manipulate each byte easily
-        flags = flags
-            .insert(0,true)
-            .insert(1,false)
-            .insert(2,true)
-            .insert(3,false)
-            .insert(4,true)
-            .insert(5,true)
-            .insert(6,false)
-            .insert(7,true);
+        bitmap = bitmap
+            .set(0,true)
+            .set(1,false)
+            .set(2,true)
+            .set(3,false)
+            .set(4,true)
+            .insert(5,uint160(0x0A3ae5b19b14920fa6a7AC9d0D5Fb6aEfaaDcc84))
 
         // check out the result in console
-        console.log("flags bin : ", flags.toBinaryStringPrefixed());
+        console.log("bitmap bin : ", bitmap.toBinaryString());
 
-        a.foo(uint8(flags));
+        a.foo(bitmap);
 
         //...
 
