@@ -1,23 +1,14 @@
-Test result: [32mok[0m. 1 passed; 0 failed; finished in 79.17s
-| src/SolBin.sol:SolBin contract |                 |       |        |       |         |
-|--------------------------------|-----------------|-------|--------|-------|---------|
-| Deployment Cost                | Deployment Size |       |        |       |         |
-| 66942                          | 392             |       |        |       |         |
-| Function Name                  | min             | avg   | median | max   | # calls |
-| countBits                      | 59193           | 60046 | 59493  | 61453 | 3       |
-
-
 | src/test/Implementation.sol:Implementation contract |                 |       |        |       |         |
 |-----------------------------------------------------|-----------------|-------|--------|-------|---------|
 | Deployment Cost                                     | Deployment Size |       |        |       |         |
-| 576606                                              | 2912            |       |        |       |         |
+| 550981                                              | 2784            |       |        |       |         |
 | Function Name                                       | min             | avg   | median | max   | # calls |
 | countBits                                           | 60188           | 61574 | 62148  | 62388 | 3       |
 | from                                                | 1542            | 17432 | 15427  | 37334 | 4       |
 | getBit                                              | 459             | 459   | 459    | 459   | 5       |
-| insert                                              | 957             | 1361  | 968    | 4049  | 9       |
+| insert                                              | 699             | 935   | 710    | 2280  | 9       |
 | setBit                                              | 671             | 884   | 1030   | 1062  | 9       |
-| toBinaryString                                      | 822             | 6272  | 2809   | 16868 | 6       |
+| toBinaryString                                      | 822             | 4536  | 2809   | 13443 | 6       |
 | toBinaryStringFillAllBits                           | 26945           | 47970 | 53355  | 58225 | 4       |
 
 

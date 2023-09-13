@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: MIT
 /// @notice Library for working with binary numbers, including conversions, bit counting, and Hamming distance calculation.
 /// @author Solthodox (https://github.com/Solthodox/solbin)
-
 pragma solidity ^0.8.4;
-import "forge-std/console.sol";
 
 library SolBin {
     /// @dev Returns the binary string representation of a uint256 value.
@@ -148,13 +146,10 @@ library SolBin {
     /// @param fromBitPosition The initial bit position to start modification from.
     /// @param bits The bits to be introduced consecutively.
     /// @return The modified binary number.
-    function insert(uint256 value, uint256 fromBitPosition, uint256 bits) internal view returns (uint256) {
-        console.log("INPUT : ", toBinaryString(value));
-        console.log("bits : ", toBinaryString(bits));
+    function insert(uint256 value, uint256 fromBitPosition, uint256 bits) internal pure returns (uint256) {
         require(fromBitPosition <= 255, "fromBitPosition must be in the range of 0 to 255");
 
         uint256 len;
-        console.log("len : ", len);
         uint256 _bits = bits;
         if (bits == 0 || bits == 1) {
             len = 1;
@@ -167,22 +162,20 @@ library SolBin {
                 }
             }
         }
-        
+
         // Create a mask with all the bits set to 1
         uint256 mask = ~uint256(0);     
         unchecked {
             // Shift the mask to the right by (255-len+1) positions
             mask >>= 255 - len + 1;
-            console.log("mask 0 : ", toBinaryString(mask));
 
-            // Shift the mask to the left by 'to' positions
+            // Shift the mask to the left by 'fromBitPosition' positions
             mask <<= fromBitPosition;
-            console.log("mask 1 : ", toBinaryString(mask));
 
             // Invert the mask to set 0s in the specified range
             mask = ~mask;
-            console.log("mask 2 : ", toBinaryString(mask));
         }
+        // Apply mask
         return (value & mask) | (bits << fromBitPosition);
     }
 }

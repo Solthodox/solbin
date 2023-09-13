@@ -38,7 +38,7 @@ contract Implementation {
         return value.getBit(bitPosition);
     }
 
-    function insert(uint256 value, uint8 fromBitPosition, uint256 bits) external view returns (uint256) {
+    function insert(uint256 value, uint8 fromBitPosition, uint256 bits) external pure returns (uint256) {
         return value.insert(fromBitPosition, bits);
     }
 }
