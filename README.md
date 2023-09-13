@@ -107,11 +107,11 @@ contract BitMapContractTest is Test{
         uint256 bitmap=0;
         // manipulate each byte easily
         bitmap = bitmap
-            .set(0,true)
-            .set(1,false)
-            .set(2,true)
-            .set(3,false)
-            .set(4,true)
+            .setBit(0,true)
+            .setBit(1,false)
+            .setBit(2,true)
+            .setBit(3,false)
+            .setBit(4,true)
             .insert(5,uint160(0x0A3ae5b19b14920fa6a7AC9d0D5Fb6aEfaaDcc84))
 
         // check out the result in console
