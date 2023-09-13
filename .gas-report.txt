@@ -1,19 +1,4 @@
-No files changed, compilation skipped
-
-Running 8 tests for test/unit/SolBin.t.sol:SolBinTest
-[32m[PASS][0m testCountBits() (gas: 191437)
-[32m[PASS][0m testFrom() (gas: 76697)
-[32m[PASS][0m testGet() (gas: 10006)
-[32m[PASS][0m testGetHammingDistance() (gas: 9124)
-[32m[PASS][0m testNullToBinaryStringUnit() (gas: 6950)
-[32m[PASS][0m testSet() (gas: 17940)
-[32m[PASS][0m testToBinaryStringFillAllBits() (gas: 190906)
-[32m[PASS][0m testToBinaryStringUnit() (gas: 31675)
-Test result: [32mok[0m. 8 passed; 0 failed; finished in 7.14ms
-
-Running 1 test for test/differencial/SolBinFFI.t.sol:SolbinTestFFI
-[32m[PASS][0m testUint256ToBinaryStringFFI(uint256) (runs: 256, μ: 35687, ~: 16418)
-Test result: [32mok[0m. 1 passed; 0 failed; finished in 68.29s
+Test result: [32mok[0m. 1 passed; 0 failed; finished in 79.17s
 | src/SolBin.sol:SolBin contract |                 |       |        |       |         |
 |--------------------------------|-----------------|-------|--------|-------|---------|
 | Deployment Cost                | Deployment Size |       |        |       |         |
@@ -25,15 +10,15 @@ Test result: [32mok[0m. 1 passed; 0 failed; finished in 68.29s
 | src/test/Implementation.sol:Implementation contract |                 |       |        |       |         |
 |-----------------------------------------------------|-----------------|-------|--------|-------|---------|
 | Deployment Cost                                     | Deployment Size |       |        |       |         |
-| 534568                                              | 2702            |       |        |       |         |
+| 576606                                              | 2912            |       |        |       |         |
 | Function Name                                       | min             | avg   | median | max   | # calls |
-| countBits                                           | 60221           | 61607 | 62181  | 62421 | 3       |
-| from                                                | 1560            | 17419 | 15383  | 37352 | 4       |
-| get                                                 | 477             | 477   | 477    | 477   | 5       |
-| getHammingDistance                                  | 458             | 932   | 649    | 1690  | 3       |
-| set                                                 | 663             | 874   | 1018   | 1050  | 9       |
-| toBinaryString                                      | 822             | 3689  | 1310   | 13443 | 6       |
-| toBinaryStringFillAllBits                           | 25642           | 43858 | 48524  | 52743 | 4       |
+| countBits                                           | 60188           | 61574 | 62148  | 62388 | 3       |
+| from                                                | 1542            | 17432 | 15427  | 37334 | 4       |
+| getBit                                              | 459             | 459   | 459    | 459   | 5       |
+| insert                                              | 957             | 1361  | 968    | 4049  | 9       |
+| setBit                                              | 671             | 884   | 1030   | 1062  | 9       |
+| toBinaryString                                      | 822             | 6272  | 2809   | 16868 | 6       |
+| toBinaryStringFillAllBits                           | 26945           | 47970 | 53355  | 58225 | 4       |
 
 
 

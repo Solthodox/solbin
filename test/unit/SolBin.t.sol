@@ -78,56 +78,44 @@ contract SolBinTest is Test {
         );
     }
 
-    function testSet() public {
+    function testSetBit() public {
         uint256 n = 124;
-        assertEq(solbin.set(n, 1, true), n + 2 ** 1);
-        assertEq(solbin.set(n, 1, false), n);
-        assertEq(solbin.set(n, 3, false), n - 2 ** 3);
-        assertEq(solbin.set(n, 3, true), n);
+        assertEq(solbin.setBit(n, 1, true), n + 2 ** 1);
+        assertEq(solbin.setBit(n, 1, false), n);
+        assertEq(solbin.setBit(n, 3, false), n - 2 ** 3);
+        assertEq(solbin.setBit(n, 3, true), n);
         n = 1232478238944;
-        assertEq(solbin.set(n, 7, false), n - 2 ** 7);
-        assertEq(solbin.set(n, 15, true), n + 2 ** 15);
-        assertEq(solbin.set(n, 3, false), n);
-        assertEq(solbin.set(n, 6, true), n);
+        assertEq(solbin.setBit(n, 7, false), n - 2 ** 7);
+        assertEq(solbin.setBit(n, 15, true), n + 2 ** 15);
+        assertEq(solbin.setBit(n, 3, false), n);
+        assertEq(solbin.setBit(n, 6, true), n);
         n = 2 ** 127;
-        assertEq(solbin.set(n, 127, false), 0);
+        assertEq(solbin.setBit(n, 127, false), 0);
     }
 
-    function testGet() public {
+    function testGetBit() public {
         uint256 n = 124;
-        assertFalse(solbin.get(n, 1));
-        assertTrue(solbin.get(n, 4));
+        assertFalse(solbin.getBit(n, 1));
+        assertTrue(solbin.getBit(n, 4));
         n = 1232478238944;
-        assertTrue(solbin.get(n, 7));
-        assertFalse(solbin.get(n, 15));
+        assertTrue(solbin.getBit(n, 7));
+        assertFalse(solbin.getBit(n, 15));
         n = 2 ** 127;
-        assertTrue(solbin.get(n, 127));
+        assertTrue(solbin.getBit(n, 127));
     }
-    //10100010111
-          //10111
-    //10101110000
+
     function testInsert() public {
         uint256 n = 1290;
-        console.log(solbin.toBinaryString(solbin.insert(n, 4, 23)));
-        /* assertEq(solbin.insert(n, 4, 23), 1303); */
-
-        /* 
-         return ((
-            (value >> (fromBitPosition +1))
-            << (len)
-        ) 
-            + bits) + ( value << (256 - fromBitPosition - len));
-        */
-
-        //n =        100111101000001101001010001111010|00000000|000000000000000
-        //bits =                                       10101001
-        //-------
-        //expected = 100111101000001101001010001111010|101010010100101001101100
-        //got =      100111101000001101001010001111010000000000000000010101001
-       /*  n = 89234802389043820;
-        console.log(solbin.toBinaryString(solbin.insert(n, 23, 169)));
-        assertEq(solbin.insert(n, 23, 169), 89234802411194988); */
-
-        
+        assertEq(solbin.insert(n, 4, 0), n);
+        assertEq(solbin.insert(n, 5, 23), 1770);
+        assertEq(solbin.insert(n, 6, 2), 1418);
+        n = 18923012;
+        assertEq(solbin.insert(n, 1, 0), n);
+        assertEq(solbin.insert(n, 8, 7), 18923268);
+        assertEq(solbin.insert(n, 0, 1), 18923013);
+        assertEq(solbin.insert(n, 24, 1), n);
+        assertEq(solbin.insert(n, 24, 0), 2145796);
+        assertEq(solbin.insert(n, 25, 2173812321), 72941037724679684);       
     }
 }
+

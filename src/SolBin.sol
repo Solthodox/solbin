@@ -54,9 +54,9 @@ library SolBin {
         if (len < 256) {
             bytes memory leadingZeroes = new bytes(256-len);
             for (uint256 i = 0; i < 256 - len;) {
-                if(fillWithOnes){
+                if (fillWithOnes) {
                     leadingZeroes[i] = 0x31;
-                }else{
+                } else {
                     leadingZeroes[i] = 0x30;
                 }
                 unchecked {
@@ -122,9 +122,9 @@ library SolBin {
     /// @param bitPosition The position (1-based) of the bit to insert or modify.
     /// @param set A boolean indicating whether to set the bit to 1 (true) or 0 (false).
     /// @return The modified binary number.
-    function set(uint256 value, uint8 bitPosition, bool set) internal pure returns (uint256) {
+    function setBit(uint256 value, uint8 bitPosition, bool set) internal pure returns (uint256) {
         // isolate the bit
-        bool targetBit = get(value, bitPosition);
+        bool targetBit = getBit(value, bitPosition);
         // if the bit is already as desired return the initial value
         if ((targetBit == true && set) || (targetBit == false && !set)) {
             return value;
@@ -139,7 +139,7 @@ library SolBin {
     /// @dev Returns wether a specific bit of a number is set(true) o r unset(false)
     /// @param value The original binary number.
     /// @param bitPosition The position (1-based) of the bit to read.
-    function get(uint256 value, uint8 bitPosition) internal pure returns (bool) {
+    function getBit(uint256 value, uint8 bitPosition) internal pure returns (bool) {
         return (value & (1 << bitPosition)) != 0;
     }
 
@@ -149,12 +149,14 @@ library SolBin {
     /// @param bits The bits to be introduced consecutively.
     /// @return The modified binary number.
     function insert(uint256 value, uint256 fromBitPosition, uint256 bits) internal view returns (uint256) {
+        console.log("INPUT : ", toBinaryString(value));
+        console.log("bits : ", toBinaryString(bits));
         require(fromBitPosition <= 255, "fromBitPosition must be in the range of 0 to 255");
-        
+
         uint256 len;
+        console.log("len : ", len);
         uint256 _bits = bits;
-        
-        if (bits == 0) {
+        if (bits == 0 || bits == 1) {
             len = 1;
         } else {
             // Get the number of bits required to represent 'bits'
@@ -165,26 +167,22 @@ library SolBin {
                 }
             }
         }
-        console.log("len : ", len);
         
-        require(256 - fromBitPosition >= len, "Invalid input: insufficient space to insert bits");
-
         // Create a mask with all the bits set to 1
-        uint256 mask = ~uint256(0);
-        uint256 from = fromBitPosition;
-        uint256 to = fromBitPosition +1 - len;
+        uint256 mask = ~uint256(0);     
         unchecked {
-            // Shift the mask to the right by 'from' positions
-            mask >>= 255 -  from;
-            
+            // Shift the mask to the right by (255-len+1) positions
+            mask >>= 255 - len + 1;
+            console.log("mask 0 : ", toBinaryString(mask));
+
             // Shift the mask to the left by 'to' positions
-            mask <<= to;
-            
+            mask <<= fromBitPosition;
+            console.log("mask 1 : ", toBinaryString(mask));
+
             // Invert the mask to set 0s in the specified range
             mask = ~mask;
+            console.log("mask 2 : ", toBinaryString(mask));
         }
-        console.log("mask : ", toBinaryString(mask));
-
-        return (value & mask) | (bits << from);
+        return (value & mask) | (bits << fromBitPosition);
     }
 }

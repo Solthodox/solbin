@@ -58,8 +58,8 @@ SolBin provides additional utility functions for various binary operations.
 - `countBits(string memory bin)`: Counts the number of set (1) and unset (0) bits in a binary string.
 - `getHammingDistance(string memory bin1, string memory bin2)`: Calculates the Hamming distance between two equal-length binary strings.
 - `from(string memory bin)`: Creates a `uint256` from its binary representation.
-- `set(string memory bin)`: Modifies a bit of a decimal number.
-- `get(string memory bin)`: Reads a bit of a decimal number.
+- `setBit(string memory bin)`: Modifies a bit of a decimal number.
+- `getBit(string memory bin)`: Reads a bit of a decimal number.
 - `insert(uint256 value, uint8 bitPosition, bool set)`: Manipulates uint256 numbers bit by bit.
 
 ## Examples

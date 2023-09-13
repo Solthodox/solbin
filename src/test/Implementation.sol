@@ -26,16 +26,16 @@ contract Implementation {
         return bin.from();
     }
 
-    function set(uint256 value, uint8 bit, bool set) external pure returns (uint256) {
-        return value.set(bit, set);
+    function setBit(uint256 value, uint8 bit, bool set) external pure returns (uint256) {
+        return value.setBit(bit, set);
     }
 
     function getHammingDistance(uint256 a, uint256 b) external pure returns (uint256 distance) {
         return SolBin.getHammingDistance(a, b);
     }
 
-    function get(uint256 value, uint8 bitPosition) external pure returns (bool) {
-        return value.get(bitPosition);
+    function getBit(uint256 value, uint8 bitPosition) external pure returns (bool) {
+        return value.getBit(bitPosition);
     }
 
     function insert(uint256 value, uint8 fromBitPosition, uint256 bits) external view returns (uint256) {
